@@ -12,3 +12,12 @@ module monitoring 'monitor/monitoring.bicep' = {
   }
 }
 
+// Cosmos Mongo ToDo Database
+module cosmos 'db/db.bicep' = {
+  name: 'cosmos'
+  params:{
+    environmentName:environmentName
+    location: location
+  }
+}
+
