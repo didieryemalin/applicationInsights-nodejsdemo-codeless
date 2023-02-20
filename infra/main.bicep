@@ -9,15 +9,14 @@ param environmentName string
 @description('The Azure location where your resources will be deployed.')
 param location string
 
-@description('Id of the user or app to assign application roles')
-param principalId string = ''
+@description('email of the user')
+param email string = ''
 
 
 // Optional: Override the resource group name here to override the azd naming convention
 param resourceGroupName string = ''
 
 var abbrs = loadJsonContent('./abbreviations.json')
-var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 
 resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
@@ -32,7 +31,7 @@ module resources 'resources.bicep' = {
   params: {
     environmentName: environmentName
     location: location
-    principalId: principalId
+    email: email
   }
 }
 

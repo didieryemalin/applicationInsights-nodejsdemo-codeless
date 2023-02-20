@@ -1,6 +1,6 @@
 param environmentName string
 param location string = resourceGroup().location
-param principalId string = ''
+param email string
 
 
 // Monitor application with Application Insights and Log Analytics as workspace
@@ -18,6 +18,31 @@ module cosmos 'db/db.bicep' = {
   params:{
     environmentName:environmentName
     location: location
+  }
+}
+
+// Email Service function App and Email Service Logic App
+module taskprocessor './web/taskprocessor.bicep' = {
+  name: 'emailservice'
+  params: {
+    environmentName: environmentName
+    location: location
+    appplicationInsightsConnectionString: monitoring.outputs.applicationInsightsConnectionString
+    cosmosConnectionString: cosmos.outputs.cosmosConnectionString
+    email: email
+  }
+}
+
+// Todo App
+module todoapp 'web/app.bicep' = {
+  name: 'todoapp'
+  params:{
+    environmentName: environmentName
+    location: location
+    appInsightsConnectionString: monitoring.outputs.applicationInsightsConnectionString
+    appInsightsInstrumentationKey: monitoring.outputs.applicationInsightsInstrumentationKey
+    cosmosConnectionString: cosmos.outputs.cosmosConnectionString
+    functionAppUrl: taskprocessor.outputs.functionappurl
   }
 }
 

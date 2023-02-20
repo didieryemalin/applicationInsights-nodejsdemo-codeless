@@ -1,28 +1,24 @@
 param environmentName string
 param location string = resourceGroup().location
+param email string
 
-module appserviceplan 'appserviceplan.bicep' = {
-  name: 'appserviceplan'
+module office365connection './logic/office365connection.bicep' = {
+  name: 'office365connection'
   params: {
     environmentName: environmentName
     location: location
-    purpose: 'func'
-    kind: 'functionapp'
-    sku: {
-      name: 'Y1'
-      tier: 'Dynamic'
-      size: 'Y1'
-      family: 'Y'
-      capacity: 0
-    }
+    email: email
   }
 }
 
-module functionapp 'functionapp.bicep' = {
-  name: 'functionapp'
+module logicapp './logic/logic.bicep' = {
+  name: 'logicapp'
   params: {
-
+    environmentName: environmentName
+    location: location
+    connectionId: office365connection.outputs.id
+    connectionApiId: office365connection.outputs.connectionApiId
   }
 }
 
-output appServicePlanId string = appserviceplan.outputs.appServicePlanId
+output logicAppUrl string = logicapp.outputs.httpTriggerUrl

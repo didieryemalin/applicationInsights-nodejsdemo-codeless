@@ -27,3 +27,5 @@ module cosmos 'cosmos-db.bicep' = {
     cosmosDatabaseName: cosmosDatabaseName
   }
 }
+
+output cosmosConnectionString string = cosmos.outputs.cosmosConnectionString

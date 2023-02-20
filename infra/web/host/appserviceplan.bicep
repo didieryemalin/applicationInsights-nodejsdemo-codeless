@@ -2,11 +2,11 @@ param environmentName string
 param location string = resourceGroup().location
 param purpose string
 
-param kind string = ''
+param kind string
 param reserved bool = false
 param sku object
 
-var abbrs = loadJsonContent('../abbreviations.json')
+var abbrs = loadJsonContent('../../abbreviations.json')
 var tags = { 'azd-env-name': environmentName }
 
 resource appserviceplan 'Microsoft.Web/serverfarms@2022-03-01' = {
