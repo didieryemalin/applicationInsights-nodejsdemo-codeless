@@ -9,7 +9,7 @@ param emailServiceUri string
 
 var abbrs = loadJsonContent('../../abbreviations.json')
 var tags = { 'azd-env-name': environmentName }
-var functionAppName = '${abbrs.webSitesFunctions}${environmentName}${purpose}'
+var functionAppName = '${abbrs.webSitesFunctions}${environmentName}-${purpose}'
 
 resource functionapp 'Microsoft.Web/sites@2022-03-01' = {
   name: functionAppName

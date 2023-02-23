@@ -10,7 +10,7 @@ var abbrs = loadJsonContent('../../abbreviations.json')
 var tags = { 'azd-env-name': environmentName }
 
 resource appserviceplan 'Microsoft.Web/serverfarms@2022-03-01' = {
-  name: '${abbrs.webServerFarms}${environmentName}${purpose}'
+  name: '${abbrs.webServerFarms}${environmentName}-${purpose}'
   location: location
   tags: tags
   sku: sku

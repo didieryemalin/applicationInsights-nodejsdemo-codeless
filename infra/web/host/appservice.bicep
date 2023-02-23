@@ -33,7 +33,7 @@ var abbrs = loadJsonContent('../../abbreviations.json')
 var tags = { 'azd-env-name': environmentName }
 
 resource appService 'Microsoft.Web/sites@2022-03-01' = {
-  name: '${abbrs.webSitesAppService}${environmentName}${purpose}'
+  name: '${abbrs.webSitesAppService}${environmentName}-${purpose}'
   location: location
   tags: tags
   kind: kind
@@ -50,29 +50,17 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
       cors: {
         allowedOrigins: union([ 'https://portal.azure.com', 'https://ms.portal.azure.com' ], allowedOrigins)
       }
+      appSettings:[
+        union(appSettings,
+          {
+            SCM_DO_BUILD_DURING_DEPLOYMENT: string(scmDoBuildDuringDeployment)
+            ENABLE_ORYX_BUILD: enableOryxBuild
+          }
+        )
+      ]
     }
     clientAffinityEnabled: clientAffinityEnabled
     httpsOnly: true
-  }
-
-  resource configAppSettings 'config' = {
-    name: 'appsettings'
-    properties: union(appSettings,
-      {
-        SCM_DO_BUILD_DURING_DEPLOYMENT: string(scmDoBuildDuringDeployment)
-        ENABLE_ORYX_BUILD: enableOryxBuild
-      }
-    )
-  }
-
-  resource configLogs 'config' = {
-    name: 'logs'
-    properties: {
-      applicationLogs: { fileSystem: { level: 'Verbose' } }
-      detailedErrorMessages: { enabled: true }
-      failedRequestsTracing: { enabled: true }
-      httpLogs: { fileSystem: { enabled: true, retentionInDays: 1, retentionInMb: 35 } }
-    }
   }
 }
 

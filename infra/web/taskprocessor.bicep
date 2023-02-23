@@ -10,7 +10,7 @@ module storage '../misc/storage.bicep' = {
   params: {
     environmentName: environmentName
     location: location
-    purpose: 'emailservice'
+    purpose: 'taskprocessor'
   }
 }
 

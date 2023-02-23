@@ -23,7 +23,7 @@ module cosmos 'db/db.bicep' = {
 
 // Email Service function App and Email Service Logic App
 module taskprocessor './web/taskprocessor.bicep' = {
-  name: 'emailservice'
+  name: 'taskprocessor'
   params: {
     environmentName: environmentName
     location: location

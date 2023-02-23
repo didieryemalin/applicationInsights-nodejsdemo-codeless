@@ -1,7 +1,6 @@
 param environmentName string
 param location string = resourceGroup().location
 param email string
-param createdDateTime string = utcNow()
 param name string = 'office365'
 
 var tags = { 'azd-env-name': environmentName }
@@ -17,7 +16,6 @@ resource office365connection 'Microsoft.Web/connections@2016-06-01' = {
         status: 'Connected'
       }
     ]
-    createdTime: createdDateTime
     api: {
       name: name
       displayName: 'Office 365 Outlook'

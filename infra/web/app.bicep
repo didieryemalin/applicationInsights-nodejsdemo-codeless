@@ -11,6 +11,7 @@ module appserviceplan 'host/appserviceplan.bicep' = {
     environmentName: environmentName
     location: location
     kind: 'linux'
+    reserved: true
     sku: {
       name: 'B1'
       tier: 'Basic'

@@ -3,13 +3,15 @@ param location string = resourceGroup().location
 param purpose string
 
 var abbrs = loadJsonContent('../abbreviations.json')
+var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
+
 var tags = { 
   'azd-env-name': environmentName
   'purpose': purpose
 }
 
 resource storage 'Microsoft.Storage/storageAccounts@2022-09-01' = {
-  name: '${abbrs.storageStorageAccounts}${environmentName}'
+  name: '${abbrs.storageStorageAccounts}${resourceToken}'
   tags: tags
   location: location
   kind: 'StorageV2'
