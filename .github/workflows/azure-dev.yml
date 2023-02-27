@@ -2,8 +2,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
-      - master
+      - global-lab-azd
 
 # https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Clinux#set-up-azure-login-with-openid-connect-authentication
 permissions:
