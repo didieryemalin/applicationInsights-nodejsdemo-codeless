@@ -46,3 +46,4 @@ module todoapp 'web/app.bicep' = {
   }
 }
 
+output todoAppUrl string = todoapp.outputs.todoAppURL

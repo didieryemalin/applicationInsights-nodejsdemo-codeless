@@ -8,7 +8,7 @@ param cosmosConnectionString string
 param emailServiceUri string
 
 var abbrs = loadJsonContent('../../abbreviations.json')
-var tags = { 'azd-env-name': environmentName }
+var tags = { 'azd-env-name': environmentName, 'azd-service-name': 'api' }
 var functionAppName = '${abbrs.webSitesFunctions}${environmentName}-${purpose}'
 
 resource functionapp 'Microsoft.Web/sites@2022-03-01' = {
