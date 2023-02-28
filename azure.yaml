@@ -14,5 +14,5 @@ infra:
     provider: bicep
     path: ./infra
     module: main
-# pipeline:
-#     provider: ""
+pipeline:
+    provider: "github"
