@@ -14,10 +14,7 @@ param runtimeVersion string
 param runtimeNameAndVersion string = '${runtimeName}|${runtimeVersion}'
 
 // App settings
-param appInsightsInstrumentationKey string
-param appInsightsConnectionString string
-param cosmosConnectionString string
-param functionAppUrl string
+param appSettings array = []
 param enableOryxBuild bool = contains(kind, 'linux')
 
 
@@ -55,43 +52,7 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
       cors: {
         allowedOrigins: union([ 'https://portal.azure.com', 'https://ms.portal.azure.com' ], allowedOrigins)
       }
-      appSettings:[
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsightsInstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: appInsightsConnectionString
-        }
-        {
-          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
-          value: '~3'
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~16'
-        }
-        {
-          name: 'XDT_MicrosoftApplicationInsights_Mode'
-          value: 'recommended'
-        }
-        {
-          name: 'XDT_MicrosoftApplicationInsights_NodeJS'
-          value: '1'
-        }
-        {
-          name: 'DATABASE_NAME'
-          value: 'todo-db'
-        }
-        {
-          name: 'DATABASE_URL'
-          value: cosmosConnectionString
-        }
-        {
-          name: 'TASK_PROCESSOR_URL'
-          value: '${functionAppUrl}/api/ProcessTasks?'
-        }
+      appSettings: union(appSettings, [
         {
           name: 'SCM_DO_BUILD_DURING_DEPLOYMENT'
           value: string(true)
@@ -100,7 +61,7 @@ resource appService 'Microsoft.Web/sites@2022-03-01' = {
           name: 'ENABLE_ORYX_BUILD'
           value: string(enableOryxBuild)
         }
-      ]
+      ])
     }
     clientAffinityEnabled: clientAffinityEnabled
     httpsOnly: true

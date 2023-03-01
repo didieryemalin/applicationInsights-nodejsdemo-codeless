@@ -5,6 +5,45 @@ param appInsightsConnectionString string
 param cosmosConnectionString string
 param functionAppUrl string
 
+param appSettings array = [
+  {
+    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+    value: appInsightsInstrumentationKey
+  }
+  {
+    name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+    value: appInsightsConnectionString
+  }
+  {
+    name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+    value: '~3'
+  }
+  {
+    name: 'WEBSITE_NODE_DEFAULT_VERSION'
+    value: '~16'
+  }
+  {
+    name: 'XDT_MicrosoftApplicationInsights_Mode'
+    value: 'recommended'
+  }
+  {
+    name: 'XDT_MicrosoftApplicationInsights_NodeJS'
+    value: '1'
+  }
+  {
+    name: 'DATABASE_NAME'
+    value: 'todo-db'
+  }
+  {
+    name: 'DATABASE_URL'
+    value: cosmosConnectionString
+  }
+  {
+    name: 'TASK_PROCESSOR_URL'
+    value: '${functionAppUrl}/api/ProcessTasks?'
+  }
+]
+
 module appserviceplan 'host/appserviceplan.bicep' = {
   name: 'appserviceplan'
   params: {
@@ -29,10 +68,7 @@ module appservice 'host/appservice.bicep' = {
     runtimeName: 'node'
     runtimeVersion: '16-lts'
     purpose: 'todoapp'
-    appInsightsConnectionString: appInsightsConnectionString
-    appInsightsInstrumentationKey: appInsightsInstrumentationKey
-    cosmosConnectionString: cosmosConnectionString
-    functionAppUrl: functionAppUrl
+    appSettings: appSettings
   }
 }
 
