@@ -83,21 +83,18 @@ router.post('/emailTasks', function(req, res, next){
 
       console.log(`Total tasks: ${tasks.length}   Current tasks: ${currentTasks.length}    Completed tasks:  ${completedTasks.length}`)
       
-      console.log("About to email tasks");
-      
-      const currentTasksSummary = getTasksSummary(currentTasks);
-      const completedTasksSummary = getTasksSummary(completedTasks);
+      console.log("About to send tasks to task processor API");
 
-      axios.post(process.env.EMAIL_SERVICE_URL, { 
-          emailAddress: emailAddress, 
-          currentTasks: currentTasksSummary, 
-          completedTasks: completedTasksSummary 
-        })
-        .then(function(response){
-          //console.log(response);
-        })
-        .catch(function(error){
-          console.log(error);
+      axios.post(process.env.TASK_PROCESSOR_URL, { 
+        emailAddress: emailAddress, 
+        currentTasks: currentTasks, 
+        completedTasks: completedTasks 
+      })
+      .then(function(response){
+        console.log("Tasks sent to task processor API")
+      })
+      .catch(function(error){
+        console.log(error);
       });
 
       res.redirect('/');
@@ -108,16 +105,5 @@ router.post('/emailTasks', function(req, res, next){
     });
   }
 });
-
-function getTasksSummary(tasks){
-  let tasksSummary = "";
-
-  for(let i = 0; i < tasks.length; i++){
-    tasksSummary = (i == (tasks.length - 1)) ? (tasksSummary + tasks[i].taskName) : (tasksSummary + `${tasks[i].taskName}, `)
-  }
-  
-  console.log(tasksSummary);
-  return tasksSummary;
-};
 
 module.exports = router;
