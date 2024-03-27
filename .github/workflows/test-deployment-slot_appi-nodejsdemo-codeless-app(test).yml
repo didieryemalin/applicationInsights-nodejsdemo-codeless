@@ -42,7 +42,9 @@ jobs:
     environment:
       name: 'test'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -52,6 +54,13 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
       
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E6ABE580683843269F65416E342A5FA9 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C43297ED6B9944398FBC663B9C15235C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FFE0B072872F4119ACAFC18F92FA633D }}
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -59,4 +68,4 @@ jobs:
           app-name: 'appi-nodejsdemo-codeless-app'
           slot-name: 'test'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CE4C8497DB454BF4B4195CF7C529A313 }}
+          
